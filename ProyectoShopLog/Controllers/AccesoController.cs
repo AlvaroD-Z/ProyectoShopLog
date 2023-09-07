@@ -15,7 +15,7 @@ namespace ProyectoShopLog.Controllers
 
     public class AccesoController : Controller
     {
-        static string chain = "Data Source=(PIPER-PC\\SQLEXPRESS);Initial Catalog = DB_SHOPLOG; Integrated Security = true";
+        static string chain = "Data Source=PIPER-PC\\SQLEXPRESS;Database = DB_SHOPLOG; Integrated Security = true";
 
 
 
