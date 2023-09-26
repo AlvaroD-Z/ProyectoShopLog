@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Nuevo limite mensual";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 bg-second-primary">
+            <h6 class="m-0 font-weight-bold text-white">Cambiar limite de gasto mensual</h6>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6">
+                                        <label for="numNuevoLimMen">Nuevo limite mensual</label>
+                                        <input type="number" class="form-control form-control-sm input-validar" id="numNuevoLimMen" name="Nuevo limite mensual">
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Limite mensual actual
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="Limite actual">30</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-shopping-basket fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success btn-sm" type="button" id="btnGuardarCambios">Guardar Cambios</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

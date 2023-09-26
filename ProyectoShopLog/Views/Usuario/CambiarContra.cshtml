@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "Cambiar Contraseña";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 bg-second-primary">
+            <h6 class="m-0 font-weight-bold text-white">Ingresar gasto</h6>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6">
+                                        <label for="txtContraAnt">Contraseña anterior</label>
+                                        <input type="text" class="form-control form-control-sm input-validar" id="txtContraAnt" name="Ingrese contraseña anterior">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="passNuevaContra">Ingrese nueva contraseña</label>
+                                        <input type="password" class="form-control form-control-sm input-validar" id="passNuevaContra" name="Ingrese nueva contraseña">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="passNuevaContraAga">Ingrese nueva contraseña nuevamente</label>
+                                        <input type="password" class="form-control form-control-sm input-validar" id="passNuevaContraAga" name="Ingrese nueva contraseña de nuevo">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success btn-sm" type="button" id="btnGuardarCambios">Guardar Cambios</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
