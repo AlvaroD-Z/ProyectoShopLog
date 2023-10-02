@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using ProyectoShopLog.DAL.Implementacion;
 using ProyectoShopLog.DAL.Interfaces;
-//using ProyectoShopLog.BLL.Implementacion;
-//using ProyectoShopLog.BLL.Interfaces;
+using ProyectoShopLog.BLL.Implementacion;
+using ProyectoShopLog.BLL.Interfaces;
 
 namespace ProyectoShopLog.IOC
 {
@@ -23,9 +23,17 @@ namespace ProyectoShopLog.IOC
             {
                 options.UseSqlServer(Configuration.GetConnectionString("CadenaSQL"));
             });
-            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IShopLogRepository, ShopLogRepository>();
+
+            services.AddScoped<ICorreoService, CorreoService>();
+
+            services.AddScoped<IUtilidadesService, UtilidadesService>();
+            services.AddScoped<IRolService, RolService>();
+
+            services.AddScoped<IUsuarioService, UsuarioService>();
         }
+
     }
 }
