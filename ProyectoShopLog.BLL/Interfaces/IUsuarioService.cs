@@ -10,8 +10,8 @@ namespace ProyectoShopLog.BLL.Interfaces
     public interface IUsuarioService
     {
         Task<List<Usuario>> Lista();
-        Task<Usuario> Crear(Usuario entidad, Stream Foto = null, string NombreFoto = "",string UrlPlantillaCorreo = "");
-        Task<Usuario> Editar(Usuario entidad, Stream Foto = null, string NombreFoto = "");
+        Task<Usuario> Crear(Usuario entidad,string UrlPlantillaCorreo = "");
+        Task<Usuario> Editar(Usuario entidad, string NombreFoto = "");
         Task<bool> Eliminar(int UsuarioId);
         Task<Usuario> ObtenerPorCredenciales(string correo, string clave);
         Task<Usuario> ObtenerPorId(int UsuarioId);

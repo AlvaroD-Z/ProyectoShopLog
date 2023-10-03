@@ -1,7 +1,9 @@
 ﻿const MODELO_BASE = {
     usuarioId: 0,
     correo: "",
+    clave: "",
     idRol: 0,
+    nombreRol: "",
 }
 
 let tablaData;
@@ -101,7 +103,6 @@ $("#btnGuardar").click(function () {
 
     $("#modalData").find("div.modal-content").LoadingOverlay("show");
 
-    console.log(parseInt($("txtId").val()));
     if (modelo.idUsuario == 0) {
         fetch("/Usuario/Crear", {
             method: "POST",
@@ -111,7 +112,7 @@ $("#btnGuardar").click(function () {
                 $("#modalData").find("div.modal-content").LoadingOverlay("hide");
                 return response.ok ? response.json() : Promise.reject(response);
             })
-            .then(resopnseJson => {
+            .then(responseJson => {
                 if (responseJson.estado) {
                     tablaData.row.add(responseJson.objeto).draw(false)
                     $("#modalData").modal("hide")

@@ -34,7 +34,7 @@ namespace ProyectoShopLog.BLL.Implementacion
             IQueryable<Usuario> query = await _repositorio.Consultar();
             return query.Include(r => r.IdRolNavigation).ToList();
         }
-        public async Task<Usuario> Crear(Usuario entidad, Stream Foto = null, string NombreFoto = "", string UrlPlantillaCorreo = "")
+        public async Task<Usuario> Crear(Usuario entidad, string UrlPlantillaCorreo = "")
         {
             Usuario usuario_existe = await _repositorio.Obtener(u => u.Correo == entidad.Correo);
             if(usuario_existe != null)
@@ -98,14 +98,8 @@ namespace ProyectoShopLog.BLL.Implementacion
             }
         }
 
-        public async Task<Usuario> Editar(Usuario entidad, Stream Foto = null, string NombreFoto = "")
+        public async Task<Usuario> Editar(Usuario entidad, string NombreFoto = "")
         {
-            Usuario usuario_existe = await _repositorio.Obtener(u => u.Correo == entidad.Correo && u.UsuarioId != entidad.UsuarioId);
-            if (usuario_existe != null)
-            {
-                throw new TaskCanceledException("El correo ya existe");
-            }
-
             try
             {
                 IQueryable<Usuario> queryUsuario = await _repositorio.Consultar(u => u.UsuarioId == entidad.UsuarioId);

@@ -33,6 +33,7 @@ namespace ProyectoShopLog.IOC
             services.AddScoped<IRolService, RolService>();
 
             services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IGastoService, GastoService>();
         }
 
     }

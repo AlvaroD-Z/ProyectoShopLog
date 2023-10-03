@@ -44,7 +44,7 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear([FromForm] IFormFile foto, [FromForm] string modelo)
+        public async Task<IActionResult> Crear([FromForm] string modelo)
         {
             GenericResponse<VMUsuario> gResponse = new GenericResponse<VMUsuario>();
 
@@ -52,25 +52,15 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
             {
                 VMUsuario vmUsuario = JsonConvert.DeserializeObject<VMUsuario>(modelo);
 
-                string nombreFoto = "";
-                Stream fotoStream = null;
-
-                if (foto != null)
-                {
-                    string nombre_en_codigo = Guid.NewGuid().ToString("N");
-                    string extension = Path.GetExtension(foto.FileName);
-                    nombreFoto = string.Concat(nombre_en_codigo, extension);
-                    fotoStream = foto.OpenReadStream();
-                }
-
                 string urlPlantillaCorreo = $"{this.Request.Scheme}://{this.Request.Host}/Plantilla/EnviarClave?correo=[correo]&clave=[clave]";
 
-                Usuario usuario_creado = await _usuarioServicio.Crear(_mapper.Map<Usuario>(vmUsuario), fotoStream, nombreFoto, urlPlantillaCorreo);
+                Usuario usuario_creado = await _usuarioServicio.Crear(_mapper.Map<Usuario>(vmUsuario), urlPlantillaCorreo);
 
                 vmUsuario = _mapper.Map<VMUsuario>(usuario_creado);
 
                 gResponse.Estado = true;
-                gResponse.Objecto = vmUsuario;
+                Console.WriteLine(vmUsuario);
+                gResponse.Objeto = vmUsuario;
             }
             catch (Exception ex)
             {
@@ -82,7 +72,7 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Editar([FromForm] IFormFile foto, [FromForm] string modelo)
+        public async Task<IActionResult> Editar( [FromForm] string modelo)
         {
             GenericResponse<VMUsuario> gResponse = new GenericResponse<VMUsuario>();
 
@@ -90,24 +80,12 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
             {
                 VMUsuario vmUsuario = JsonConvert.DeserializeObject<VMUsuario>(modelo);
 
-                string nombreFoto = "";
-                Stream fotoStream = null;
-
-                if (foto != null)
-                {
-                    string nombre_en_codigo = Guid.NewGuid().ToString("N");
-                    string extension = Path.GetExtension(foto.FileName);
-                    nombreFoto = string.Concat(nombre_en_codigo, extension);
-                    fotoStream = foto.OpenReadStream();
-                }
-
-
-                Usuario usuario_editado = await _usuarioServicio.Editar(_mapper.Map<Usuario>(vmUsuario), fotoStream, nombreFoto);
+                Usuario usuario_editado = await _usuarioServicio.Editar(_mapper.Map<Usuario>(vmUsuario));
 
                 vmUsuario = _mapper.Map<VMUsuario>(usuario_editado);
 
                 gResponse.Estado = true;
-                gResponse.Objecto = vmUsuario;
+                gResponse.Objeto = vmUsuario;
             }
             catch (Exception ex)
             {
