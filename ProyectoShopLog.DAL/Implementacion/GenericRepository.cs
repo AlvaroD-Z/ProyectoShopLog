@@ -22,7 +22,7 @@ namespace ProyectoShopLog.DAL.Implementacion
         {
             try
             {
-                TEntity entidad = await _dbContext.Set  <TEntity>().FirstOrDefaultAsync(filtro);
+                TEntity entidad = await _dbContext.Set<TEntity>().FirstOrDefaultAsync(filtro);
                 return entidad;
             }
             catch
@@ -35,7 +35,7 @@ namespace ProyectoShopLog.DAL.Implementacion
         {
             try
             {
-                _dbContext.Set  <TEntity>().Add(entidad);
+                _dbContext.Set<TEntity>().Add(entidad);
                 await _dbContext.SaveChangesAsync();
                 return entidad;
             }

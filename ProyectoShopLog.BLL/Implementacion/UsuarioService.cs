@@ -9,6 +9,7 @@ using System.Net;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.DAL.Interfaces;
 using ProyectoShopLog.Entity;
+using Azure;
 
 namespace ProyectoShopLog.BLL.Implementacion
 {
@@ -131,11 +132,11 @@ namespace ProyectoShopLog.BLL.Implementacion
             }
         }
 
-        public async Task<bool> Eliminar(int IdUsuario)
+        public async Task<bool> Eliminar(int UsuarioId)
         {
             try
             {
-                Usuario usuario_encontrado = await _repositorio.Obtener(u => u.UsuarioId == IdUsuario);
+                Usuario usuario_encontrado = await _repositorio.Obtener(u => u.UsuarioId == UsuarioId);
 
                 if(usuario_encontrado == null)
                 {
@@ -158,9 +159,9 @@ namespace ProyectoShopLog.BLL.Implementacion
             Usuario usuario_encontrado = await _repositorio.Obtener(u => u.Correo.Equals(correo) && u.Clave.Equals(clave_encriptada));
             return usuario_encontrado;
         }
-        public async Task<Usuario> ObtenerPorId(int IdUsuario)
+        public async Task<Usuario> ObtenerPorId(int UsuarioId)
         {
-            IQueryable<Usuario> query = await _repositorio.Consultar(u => u.UsuarioId == IdUsuario);
+            IQueryable<Usuario> query = await _repositorio.Consultar(u => u.UsuarioId == UsuarioId);
 
             Usuario resultado = query.Include(r => r.IdRolNavigation).FirstOrDefault();
             return resultado;
@@ -184,11 +185,11 @@ namespace ProyectoShopLog.BLL.Implementacion
                 throw;
             }
         }
-        public async Task<bool> CambiarClave(int IdUsuario, string ClaveActual, string ClaveNueva)
+        public async Task<bool> CambiarClave(int UsuarioId, string ClaveActual, string ClaveNueva)
         {
             try
             {
-                Usuario usuario_encontrado = await _repositorio.Obtener(u => u.UsuarioId == IdUsuario);
+                Usuario usuario_encontrado = await _repositorio.Obtener(u => u.UsuarioId == UsuarioId);
                 if (usuario_encontrado == null)
                 {
                     throw new TaskCanceledException("Usuario no existe");
