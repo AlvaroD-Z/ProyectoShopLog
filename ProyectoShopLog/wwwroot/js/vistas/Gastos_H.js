@@ -1,11 +1,8 @@
 ﻿const MODELO_BASE = {
-    gastoId: 0,
-    usuarioId: 0,
     nombre: "",
     descripcion: "",
     monto: 0,
     fechaDeIngreso: "",
-    usuario: "",
 }
 
 let tablaData;
@@ -82,9 +79,10 @@ $("#btnGuardar").click(function () {
     }
 
     const modelo = structuredClone(MODELO_BASE);
-    modelo["idUsuario"] = parseInt($("#txtId").val())
-    modelo["correo"] = $("#txtCorreo").val()
-    modelo["idRol"] = $("#cboRol").val()
+    modelo["nombre"] = $("#txtNombre").val()
+    modelo["descripcion"] = $("#txtDescripcion").val()
+    modelo["monto"] = parseInt($("#numMonto").val())
+    modelo["fechaDeIngreso"] = $("#dateFecha").val()
 
     const formData = new FormData();
 
@@ -93,45 +91,24 @@ $("#btnGuardar").click(function () {
 
     $("#modalData").find("div.modal-content").LoadingOverlay("show");
 
-    if (modelo.idUsuario == 0) {
-        fetch("/Usuario/Crear", {
-            method: "POST",
-            body: formData
+    fetch("/AdmiGasto/Crear", {
+        method: "POST",
+        body: formData
+    })
+        .then(response => {
+            $("#modalData").find("div.modal-content").LoadingOverlay("hide");
+            return response.ok ? response.json() : Promise.reject(response);
         })
-            .then(response => {
-                $("#modalData").find("div.modal-content").LoadingOverlay("hide");
-                return response.ok ? response.json() : Promise.reject(response);
-            })
-            .then(responseJson => {
-                if (responseJson.estado) {
-                    tablaData.row.add(responseJson.objeto).draw(false)
-                    $("#modalData").modal("hide")
-                    swal("Listo!", "El usuario fue creado", "success")
-                } else {
-                    swal("Lo sentimos, no se creo el usuario", responseJson.mensaje, "error")
-                }
-            })
-    } else {
-        fetch("/Usuario/Editar", {
-            method: "PUT",
-            body: formData
+        .then(responseJson => {
+            if (responseJson.estado) {
+                tablaData.row.add(responseJson.objeto).draw(false)
+                $("#modalData").modal("hide")
+                swal("Listo!", "El usuario fue creado", "success")
+            } else {
+                swal("Lo sentimos, no se creo el usuario", responseJson.mensaje, "error")
+            }
         })
-            .then(response => {
-                $("#modalData").find("div.modal-content").LoadingOverlay("hide");
-                return response.ok ? response.json() : Promise.reject(response);
-            })
-            .then(responseJson => {
-                if (responseJson.estado) {
-                    tablaData.row(filaSeleccionada).data(responseJson.objeto).draw(false);
-                    filaSeleccionada = null;
-                    $("#modalData").modal("hide")
-                    swal("Listo!", "El usuario fue editado", "success")
-                } else {
-                    swal("Lo sentimos no se pudo editar", responseJson.mensaje, "error")
-                }
-            })
-    }
-})
+    })
 
 let filaSeleccionada
 $("#tbdata tbody").on("click", ".btn-editar", function () {
