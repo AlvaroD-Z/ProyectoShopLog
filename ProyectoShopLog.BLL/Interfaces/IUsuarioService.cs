@@ -11,7 +11,7 @@ namespace ProyectoShopLog.BLL.Interfaces
     {
         Task<List<Usuario>> Lista();
         Task<Usuario> Crear(Usuario entidad,string UrlPlantillaCorreo = "");
-        Task<Usuario> Editar(Usuario entidad, string NombreFoto = "");
+        Task<Usuario> Editar(Usuario entidad);
         Task<bool> Eliminar(int UsuarioId);
         Task<Usuario> ObtenerPorCredenciales(string correo, string clave);
         Task<Usuario> ObtenerPorId(int UsuarioId);

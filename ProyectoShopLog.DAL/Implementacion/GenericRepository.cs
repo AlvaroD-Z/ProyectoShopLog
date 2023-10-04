@@ -49,7 +49,7 @@ namespace ProyectoShopLog.DAL.Implementacion
         {
             try
             {
-                _dbContext.Update(entidad);
+                _dbContext.Set<TEntity>().Update(entidad);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

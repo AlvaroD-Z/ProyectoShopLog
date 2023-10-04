@@ -98,8 +98,9 @@ namespace ProyectoShopLog.BLL.Implementacion
             }
         }
 
-        public async Task<Usuario> Editar(Usuario entidad, string NombreFoto = "")
+        public async Task<Usuario> Editar(Usuario entidad)
         {
+            Console.WriteLine("hola ctmr");
             try
             {
                 IQueryable<Usuario> queryUsuario = await _repositorio.Consultar(u => u.UsuarioId == entidad.UsuarioId);
@@ -108,7 +109,7 @@ namespace ProyectoShopLog.BLL.Implementacion
                 usuario_editar.Clave = entidad.Clave;
                 usuario_editar.Correo = entidad.Correo;
                 usuario_editar.IdRol = entidad.IdRol;
-
+                Console.WriteLine(usuario_editar);
                 bool respuesta = await _repositorio.Editar(usuario_editar);
 
                 if (respuesta)

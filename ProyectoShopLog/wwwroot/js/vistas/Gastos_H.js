@@ -1,32 +1,21 @@
 ﻿const MODELO_BASE = {
+    gastoId: 0,
     usuarioId: 0,
-    correo: "",
-    clave: "",
-    idRol: 0,
-    nombreRol: "",
+    nombre: "",
+    descripcion: "",
+    monto: 0,
+    fechaDeIngreso: "",
+    usuario: "",
 }
 
 let tablaData;
 
 $(document).ready(function () {
 
-    fetch("/Usuario/ListaRoles")
-        .then(response => {
-            return response.ok ? response.json() : Promise.reject(response);
-        })
-        .then(responseJson => {
-            if (responseJson.length > 0) {
-                responseJson.forEach((item) => {
-                    $("#cboRol").append(
-                        $("<option>").val(item.idRol).text(item.descripcion)
-                    )
-                })
-            }
-        })
     tablaData = $('#tbdata').DataTable({
         responsive: true,
          "ajax": {
-             "url": '/Usuario/Lista',
+             "url": '/AdmiGasto/Lista',
              "type": "GET",
              "datatype": "json"
          },
@@ -34,11 +23,13 @@ $(document).ready(function () {
             { "defaultContent": "-", "targets": "_all" }
         ],*/
          "columns": [
+             { "data": "gastoId", "visible": true, "searchable": false },
              { "data": "usuarioId", "visible": true, "searchable": false },
-             { "data": "correo" },
-             { "data": "clave", "visible": false, "searchable": false },
-             { "data": "idRol", "visible": false },
-             { "data": "nombreRol"},
+             { "data": "nombre" },
+             { "data": "descripcion" },
+             { "data": "monto" },
+             { "data": "fechaDeIngreso" },
+             { "data": "usuario", "visible": false, "searchable": false },
              {
                  "defaultContent": `<button class="btn btn-primary btn-editar btn-sm mr-2"><i class="fas fa-pencil-alt"></i></button>` +
                      `<button class="btn btn-danger btn-eliminar btn-sm"><i class="fas fa-trash-alt"></i></button>`,
