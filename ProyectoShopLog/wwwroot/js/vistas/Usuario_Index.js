@@ -66,6 +66,8 @@ $(document).ready(function () {
     });
 })
 
+let filaSeleccionada
+
 function mostrarModal(modelo = MODELO_BASE) {
     $("#txtId").val(modelo.usuarioId)
     $("#txtCorreo").val(modelo.correo)
@@ -132,6 +134,7 @@ $("#btnGuardar").click(function () {
             .then(responseJson => {
                 if (responseJson.estado) {
                     tablaData.row(filaSeleccionada).data(responseJson.objeto).draw(false);
+                    console.log(responseJson.objeto);
                     filaSeleccionada = null;
                     $("#modalData").modal("hide")
                     swal("Listo!", "El usuario fue editado", "success")
@@ -142,7 +145,6 @@ $("#btnGuardar").click(function () {
     }
 })
 
-let filaSeleccionada
 $("#tbdata tbody").on("click", ".btn-editar", function () {
     if ($(this).closest("tr").hasClass("child")) {
         filaSeleccionada = $(this).closest("tr").prev();

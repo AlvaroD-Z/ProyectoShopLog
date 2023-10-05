@@ -49,7 +49,7 @@ namespace ProyectoShopLog.DAL.Implementacion
         {
             try
             {
-                _dbContext.Set<TEntity>().Update(entidad);
+                _dbContext.Update(entidad);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
@@ -73,7 +73,7 @@ namespace ProyectoShopLog.DAL.Implementacion
                 throw;
             }
         }
-        public async Task<IQueryable<TEntity>> Consultar(Expression<Func<TEntity,bool>> filtro = null)
+        public async Task<IQueryable<TEntity>> Consultar(Expression<Func<TEntity,bool>> filtro )
         {
             IQueryable<TEntity> queryEntidad = filtro == null ? _dbContext.Set<TEntity>() : _dbContext.Set<TEntity>().Where(filtro);
             return queryEntidad;

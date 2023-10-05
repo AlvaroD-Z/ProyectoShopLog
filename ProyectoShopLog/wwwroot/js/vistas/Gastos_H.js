@@ -1,4 +1,5 @@
-﻿const MODELO_BASE = {
+﻿
+const MODELO_BASE = {
     nombre: "",
     descripcion: "",
     monto: 0,
@@ -15,10 +16,12 @@ $(document).ready(function () {
              "url": '/AdmiGasto/Lista',
              "type": "GET",
              "datatype": "json"
-         },
-        /*"columnDefs": [
-            { "defaultContent": "-", "targets": "_all" }
-        ],*/
+             	
+        },
+        drawCallback: function () {
+            var tot = tablaData.column(4).data().sum();
+            $("#total").text(tot);
+        },
          "columns": [
              { "data": "gastoId", "visible": true, "searchable": false },
              { "data": "usuarioId", "visible": true, "searchable": false },
@@ -51,7 +54,9 @@ $(document).ready(function () {
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
         },
+
     });
+
 })
 
 function mostrarModal(modelo = MODELO_BASE) {
@@ -86,7 +91,6 @@ $("#btnGuardar").click(function () {
 
     const formData = new FormData();
 
-    formData.append("foto", null)
     formData.append("modelo", JSON.stringify(modelo))
 
     $("#modalData").find("div.modal-content").LoadingOverlay("show");

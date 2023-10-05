@@ -100,6 +100,13 @@ namespace ProyectoShopLog.BLL.Implementacion
 
         public async Task<Usuario> Editar(Usuario entidad)
         {
+            Usuario usuario_existe = await _repositorio.Obtener(u => u.Correo == entidad.Correo && u.UsuarioId != entidad.UsuarioId);
+
+            if (usuario_existe != null)
+            {
+                throw new TaskCanceledException("El correo ya existe");
+            }
+
             try
             {
                 IQueryable<Usuario> queryUsuario = await _repositorio.Consultar(u => u.UsuarioId == entidad.UsuarioId);
@@ -108,13 +115,13 @@ namespace ProyectoShopLog.BLL.Implementacion
                 usuario_editar.Clave = entidad.Clave;
                 usuario_editar.Correo = entidad.Correo;
                 usuario_editar.IdRol = entidad.IdRol;
-                Console.WriteLine(usuario_editar);
                 bool respuesta = await _repositorio.Editar(usuario_editar);
 
                 if (respuesta)
                 {
                     throw new TaskCanceledException("No se pudo modificar el usuario");
                 }
+
                 Usuario usuario_editado = queryUsuario.Include(r => r.IdRolNavigation).First();
 
                 return usuario_editado;

@@ -15,30 +15,15 @@ namespace ProyectoShopLog.AplicacionWeb.Utilidades.Automapper
             #region Gasto
             CreateMap<Gasto, VMGasto>()
                 .ForMember(destino =>
-                destino.Nombre,
-                opt => opt.MapFrom(origen => origen.Nombre)
-                )
-                .ForMember(destino =>
                 destino.Monto,
                 opt => opt.MapFrom(origen => Convert.ToString(origen.Monto.Value, new CultureInfo("es-PE")))
-                ).ForMember(destino =>
-                destino.Descripcion,
-                opt => opt.MapFrom(origen => origen.Descripcion));
+                );
 
             CreateMap<VMGasto, Gasto>()
                 .ForMember(destino =>
-                destino.Nombre,
-                opt => opt.Ignore()
-                )
-                .ForMember(destino =>
                 destino.Monto,
                 opt => opt.MapFrom(origen => Convert.ToDecimal(origen.Monto, new CultureInfo("es-PE")))
-                ).ForMember(destino =>
-                destino.Descripcion,
-                opt => opt.Ignore())
-                .ForMember(destino =>
-                destino.FechaDeIngreso,
-                opt => opt.MapFrom(origen => origen.FechaDeIngreso.Value.ToString("dd/MM/yyyy")));
+                );
 
             #endregion
             #region HistorialComentario
