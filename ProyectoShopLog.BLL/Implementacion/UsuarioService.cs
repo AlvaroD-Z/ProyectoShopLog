@@ -10,6 +10,7 @@ using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.DAL.Interfaces;
 using ProyectoShopLog.Entity;
 using Azure;
+using System.Diagnostics;
 
 namespace ProyectoShopLog.BLL.Implementacion
 {
@@ -110,9 +111,8 @@ namespace ProyectoShopLog.BLL.Implementacion
             try
             {
                 IQueryable<Usuario> queryUsuario = await _repositorio.Consultar(u => u.UsuarioId == entidad.UsuarioId);
-
+                Debug.WriteLine("geloo");
                 Usuario usuario_editar = queryUsuario.First();
-                usuario_editar.Clave = entidad.Clave;
                 usuario_editar.Correo = entidad.Correo;
                 usuario_editar.IdRol = entidad.IdRol;
                 bool respuesta = await _repositorio.Editar(usuario_editar);

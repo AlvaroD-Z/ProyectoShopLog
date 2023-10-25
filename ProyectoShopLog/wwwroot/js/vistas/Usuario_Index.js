@@ -66,8 +66,6 @@ $(document).ready(function () {
     });
 })
 
-let filaSeleccionada
-
 function mostrarModal(modelo = MODELO_BASE) {
     $("#txtId").val(modelo.usuarioId)
     $("#txtCorreo").val(modelo.correo)
@@ -93,7 +91,7 @@ $("#btnGuardar").click(function () {
     }
 
     const modelo = structuredClone(MODELO_BASE);
-    modelo["idUsuario"] = parseInt($("#txtId").val())
+    modelo["usuarioId"] = parseInt($("#txtId").val())
     modelo["correo"] = $("#txtCorreo").val()
     modelo["idRol"] = $("#cboRol").val()
 
@@ -104,7 +102,7 @@ $("#btnGuardar").click(function () {
 
     $("#modalData").find("div.modal-content").LoadingOverlay("show");
 
-    if (modelo.idUsuario == 0) {
+    if (modelo.usuarioId == 0) {
         fetch("/Usuario/Crear", {
             method: "POST",
             body: formData
@@ -134,7 +132,6 @@ $("#btnGuardar").click(function () {
             .then(responseJson => {
                 if (responseJson.estado) {
                     tablaData.row(filaSeleccionada).data(responseJson.objeto).draw(false);
-                    console.log(responseJson.objeto);
                     filaSeleccionada = null;
                     $("#modalData").modal("hide")
                     swal("Listo!", "El usuario fue editado", "success")
@@ -145,6 +142,7 @@ $("#btnGuardar").click(function () {
     }
 })
 
+let filaSeleccionada;
 $("#tbdata tbody").on("click", ".btn-editar", function () {
     if ($(this).closest("tr").hasClass("child")) {
         filaSeleccionada = $(this).closest("tr").prev();
@@ -154,4 +152,49 @@ $("#tbdata tbody").on("click", ".btn-editar", function () {
 
     const data = tablaData.row(filaSeleccionada).data();
     mostrarModal(data)
+})
+
+$("#tbdata tbody").on("click", ".btn-eliminar", function () {
+
+    let fila;
+    if ($(this).closest("tr").hasClass("child")) {
+        fila = $(this).closest("tr").prev();
+    } else {
+        fila = $(this).closest("tr");
+    }
+
+    const data = tablaData.row(fila).data();
+    swal({
+        title: "¿Estas Seguro?",
+        text: `Eliminar al usuario "${data.nombre}"`,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Si, eliminar",
+        cancelButtonText: "No, cancelar",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },
+        function (respuesta) {
+            if (respuesta) {
+                $(".showSweetAlert").LoadingOverlay("show");
+                fetch(`/Usuario/Eliminar?usuarioId=${data.usuarioId}`, {
+                    method: "DELETE"
+                })
+                    .then(response => {
+                        $(".showSweetAlert").LoadingOverlay("hide");
+                        return response.ok ? response.json() : Promise.reject(response);
+                    })
+                    .then(responseJson => {
+                        if (responseJson.estado) {
+                            tablaData.row(fila).remove().draw();
+                            swal("Listo!", "El usuario fue eliminado", "success")
+                        } else {
+                            swal("Lo sentimos no se pudo eliminar", responseJson.mensaje, "error")
+                        }
+                    })
+            }
+        }
+
+    )
 })

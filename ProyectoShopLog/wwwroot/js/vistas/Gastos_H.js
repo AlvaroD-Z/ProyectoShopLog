@@ -19,7 +19,7 @@ $(document).ready(function () {
              	
         },
         drawCallback: function () {
-            var tot = tablaData.column(4).data().sum();
+            var tot = tablaData.column(4).sum();
             $("#total").text(tot);
         },
          "columns": [
@@ -45,9 +45,9 @@ $(document).ready(function () {
                 text: 'Exportar Excel',
                 extend: 'excelHtml5',
                 title: '',
-                filename: 'Reporte Usuarios',
+                filename: 'Reporte Gastos',
                 exportOptions: {
-                    columns: [1, 3, 4]
+                    columns: [0,1,2,3]
                 }
             }, 'pageLength'
         ],
@@ -60,9 +60,10 @@ $(document).ready(function () {
 })
 
 function mostrarModal(modelo = MODELO_BASE) {
-    $("#txtId").val(modelo.usuarioId)
-    $("#txtCorreo").val(modelo.correo)
-    $("#cboRol").val(modelo.idRol == 0 ? $("#cboRol option:first").val() : modelo.idRol)
+    $("#txtNombre").val(modelo.nombre)
+    $("#txtDescripcion").val(modelo.descripcion)
+    $("#numMonto").val(modelo.monto)
+    $("#dateFecha").val(modelo.fechaDeIngreso)
     $("#modalData").modal("show")
 }
 
@@ -93,20 +94,19 @@ $("#btnGuardar").click(function () {
 
     formData.append("modelo", JSON.stringify(modelo))
 
-    $("#modalData").find("div.modal-content").LoadingOverlay("show");
+    $.LoadingOverlay("show");
 
     fetch("/AdmiGasto/Crear", {
         method: "POST",
         body: formData
     })
         .then(response => {
-            $("#modalData").find("div.modal-content").LoadingOverlay("hide");
+            $.LoadingOverlay("hide");
             return response.ok ? response.json() : Promise.reject(response);
         })
         .then(responseJson => {
             if (responseJson.estado) {
                 tablaData.row.add(responseJson.objeto).draw(false)
-                $("#modalData").modal("hide")
                 swal("Listo!", "El usuario fue creado", "success")
             } else {
                 swal("Lo sentimos, no se creo el usuario", responseJson.mensaje, "error")
