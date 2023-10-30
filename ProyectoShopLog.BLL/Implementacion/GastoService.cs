@@ -29,7 +29,7 @@ namespace ProyectoShopLog.BLL.Implementacion
         public async Task<List<Gasto>> Lista()
         {
             IQueryable<Gasto> query = await _repositorio.Consultar();
-            return query.ToList();
+            return query.Include(entity => entity.Categoria).ToList();
         }
 
         public async Task<Gasto> Crear(Gasto entidad)
@@ -42,11 +42,7 @@ namespace ProyectoShopLog.BLL.Implementacion
                 {
                     throw new TaskCanceledException("No se pudo ingresar el gasto");
                 }
-                else
-                {
-                    Console.WriteLine("Gasto ingresado correctamente");
-                }
-                   
+
                 IQueryable<Gasto> query = await _repositorio.Consultar(u => u.GastoId == gasto_creado.GastoId);
                 gasto_creado = query.First();
 
@@ -54,7 +50,6 @@ namespace ProyectoShopLog.BLL.Implementacion
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -69,15 +64,17 @@ namespace ProyectoShopLog.BLL.Implementacion
                 Gasto_editar.Nombre = entidad.Nombre;
                 Gasto_editar.Descripcion = entidad.Descripcion;
                 Gasto_editar.Monto = entidad.Monto;
+                Gasto_editar.CategoriaId = entidad.CategoriaId;
+                Gasto_editar.TipoMovimiento = entidad.TipoMovimiento;
 
                 bool respuesta = await _repositorio.Editar(Gasto_editar);
 
-                if (respuesta)
+                if (!respuesta)
                 {
                     throw new TaskCanceledException("No se pudo modificar el Gasto");
                 }
-                Gasto gasto_editado = queryGasto.Include(r => r.GastoId).First();
 
+                Gasto gasto_editado = queryGasto.First();
                 return gasto_editado;
             }
             catch
@@ -97,6 +94,7 @@ namespace ProyectoShopLog.BLL.Implementacion
                 {
                     throw new TaskCanceledException("El Gasto no existe");
                 }
+
                 bool respuesta = await _repositorio.Eliminar(gasto_encontrado);
 
                 return true;
@@ -114,6 +112,37 @@ namespace ProyectoShopLog.BLL.Implementacion
 
             Gasto resultado = query.FirstOrDefault();
             return resultado;
+        }
+
+        public async Task<List<Gasto>> GetIngresos(DateTime fechaInicio, DateTime fechaFin)
+        {
+            String ingresosCodigo = "INGRESOS";
+
+            IQueryable<Gasto> ingresosQueryable = await _repositorio.Consultar(ingreso =>
+                ingreso.TipoMovimiento == ingresosCodigo &&
+                fechaInicio <= ingreso.FechaDeIngreso &&
+                ingreso.FechaDeIngreso <= fechaFin
+            );
+            return ingresosQueryable.Include(ingreso => ingreso.Categoria).ToList();
+        }
+
+        public async Task<List<Gasto>> GetGastos(DateTime fechaInicio, DateTime fechaFin)
+        {
+            String gastosCodigo = "GASTOS";
+            IQueryable<Gasto> gastosQueryable = await _repositorio.Consultar(gasto =>
+                gasto.TipoMovimiento == gastosCodigo &&
+                fechaInicio <= gasto.FechaDeIngreso &&
+                gasto.FechaDeIngreso <= fechaFin
+            );
+            return gastosQueryable.Include(gasto => gasto.Categoria).ToList();
+        }
+
+        public async Task<Balance> GetBalance(DateTime fechaInicio, DateTime fechaFin)
+        {
+            List<Gasto> ingresos = await GetIngresos(fechaInicio, fechaFin);
+            List<Gasto> gastos = await GetGastos(fechaInicio, fechaFin);
+
+            return new Balance(gastos, ingresos);
         }
     }
 }

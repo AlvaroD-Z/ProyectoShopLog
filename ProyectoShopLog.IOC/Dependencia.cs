@@ -19,7 +19,7 @@ namespace ProyectoShopLog.IOC
     {
         public static void InyectarDependencia(this IServiceCollection services, IConfiguration Configuration)
         {
-            services.AddDbContext<DbShoplogContext>( options =>
+            services.AddDbContext<DbShoplogContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("CadenaSQL"));
             });
@@ -34,6 +34,8 @@ namespace ProyectoShopLog.IOC
 
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IGastoService, GastoService>();
+
+            services.AddScoped<ICategoriaService, CategoriaService>();
         }
 
     }

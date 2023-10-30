@@ -33,6 +33,9 @@ public partial class DbShoplogContext : DbContext
     public virtual DbSet<RolMenu> RolMenus { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
+
+    public virtual DbSet<Categoria> Categorias { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Configuracion>(entity =>
@@ -72,6 +75,10 @@ public partial class DbShoplogContext : DbContext
             entity.HasOne(d => d.Usuario).WithMany(p => p.Gastos)
                 .HasForeignKey(d => d.UsuarioId)
                 .HasConstraintName("FK__GASTO__UsuarioId__656C112C");
+
+            entity.HasOne(d => d.Categoria)
+                .WithMany(p => p.Gastos)
+                .HasForeignKey(d => d.CategoriaId);
         });
 
         modelBuilder.Entity<Historialcomentario>(entity =>
@@ -209,6 +216,21 @@ public partial class DbShoplogContext : DbContext
             entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Usuarios)
                 .HasForeignKey(d => d.IdRol)
                 .HasConstraintName("FK__USUARIO__idRol__1F98B2C1");
+        });
+
+        modelBuilder.Entity<Categoria>(entity =>
+        {
+            entity.HasKey(e => e.CategoriaId);
+            entity.ToTable("Categoria");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.TipoMovimiento)
+                .HasMaxLength(8)
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);
