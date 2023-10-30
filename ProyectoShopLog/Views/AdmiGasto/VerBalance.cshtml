@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "Ver Balance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="card mb-4">
+        <div class="card-header text-white bg-second-primary">
+            PERIODO
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-12 col-md-3">
+                    <label for="fechaInicio">Fecha Inicio</label>
+                    <input class="form-control" type="date" id="fechaInicioBalance">
+                </div>
+
+                <div class="form-group col-12 col-md-3">
+                    <label for="fechaFin">Fecha Fin</label>
+                    <input class="form-control" type="date" id="fechaFinBalance">
+                </div>
+                
+                
+            </div>
+            <button type="button" class="btn btn-primary" id="obtenerBalance">Obtener</button>
+
+        </div>
+    </div>
+
+    <div class="alert" role="alert" id="balanceSaldoResultante"></div>
+
+    <div class="card mb-4">
+        <div class="card-header text-white bg-second-primary">
+            GASTOS
+        </div>
+        <div class="card-body">
+            <table class="table" id="gastosTable">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 350px;">CATEGORIA</th>
+                        <th scope="col">NOMBRE</th>
+                        <th scope="col" style="width: 350px;">MONTO</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header text-white bg-second-primary">
+            INGRESOS
+        </div>
+        <div class="card-body">
+            <table class="table" id="ingresosTable">
+                <thead>
+                    <tr>
+                        <th scope="col"  style="width: 350px;">CATEGORIA</th>
+                        <th scope="col">NOMBRE</th>
+                        <th scope="col" style="width: 350px;">MONTO</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/vistas/ver-balance.js"></script>
+}

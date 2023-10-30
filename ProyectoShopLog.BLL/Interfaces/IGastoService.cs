@@ -14,5 +14,9 @@ namespace ProyectoShopLog.BLL.Interfaces
         Task<Gasto> Editar(Gasto entidad);
         Task<bool> Eliminar(int GastoId);
         Task<Gasto> ObtenerPorId(int GastoId);
+
+        Task<List<Gasto>> GetIngresos(DateTime fechaInicio, DateTime fechaFin);
+        Task<List<Gasto>> GetGastos(DateTime fechaInicio, DateTime fechaFin);
+        Task<Balance> GetBalance(DateTime fechaInicio, DateTime fechaFin);
     }
 }
