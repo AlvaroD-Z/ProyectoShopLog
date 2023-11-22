@@ -6,9 +6,26 @@ using ProyectoShopLog.AplicacionWeb.Models.ViewModels;
 using ProyectoShopLog.AplicacionWeb.Utilidades.Response;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.Entity;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ProyectoShopLog.Models;
+using System.Diagnostics;
+using System.Net;
+using System.Security.Claims;
+
+using AutoMapper;
+using ProyectoShopLog.AplicacionWeb.Models.ViewModels;
+using ProyectoShopLog.AplicacionWeb.Utilidades.Response;
+using ProyectoShopLog.BLL.Interfaces;
+using ProyectoShopLog.Entity;
 
 namespace ProyectoShopLog.AplicacionWeb.Controllers
 {
+    [Authorize]
     public class UsuarioController : Controller
     {
         private readonly IMapper _mapper;
@@ -111,6 +128,32 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
             }
 
             return StatusCode(StatusCodes.Status200OK, gResponse);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CambiarClave([FromBody] VMCambiarClave modelo)
+        {
+            GenericResponse<bool> response = new GenericResponse<bool>();
+            try
+            {
+                ClaimsPrincipal claimUser = HttpContext.User;
+                string idUsuario = claimUser.Claims
+                    .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                    .Select(c => c.Value).SingleOrDefault();
+
+                bool resultado = await _usuarioServicio.CambiarClave(
+                    int.Parse(idUsuario),
+                    modelo.claveActual,
+                    modelo.claveNueva
+                    );
+
+                response.Estado = resultado;
+            }
+            catch (Exception ex)
+            {
+                response.Estado = false;
+                response.Mensaje = ex.Message;
+            }
+            return StatusCode(StatusCodes.Status200OK, response);
         }
 
     }

@@ -1,16 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoShopLog.Models;
 using System.Diagnostics;
+using System.Net;
+using System.Security.Claims;
+
+using AutoMapper;
+using ProyectoShopLog.AplicacionWeb.Models.ViewModels;
+using ProyectoShopLog.AplicacionWeb.Utilidades.Response;
+using ProyectoShopLog.BLL.Interfaces;
+using ProyectoShopLog.Entity;
 
 namespace ProyectoShopLog.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUsuarioService _usuarioServicio;
+        private readonly IMapper _mapper;
+        public HomeController(IUsuarioService usuarioServicio, IMapper mapper)
         {
-            _logger = logger;
+            _usuarioServicio = usuarioServicio;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -26,11 +39,65 @@ namespace ProyectoShopLog.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> ObtenerUsuario ()
+        {
+            GenericResponse<VMUsuario> response = new GenericResponse<VMUsuario> ();
+            try
+            {
+                ClaimsPrincipal claimUser = HttpContext.User;
+                string idUsuario = claimUser.Claims
+                    .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                    .Select(c => c.Value).SingleOrDefault();
+
+                VMUsuario usuario = _mapper.Map<VMUsuario>(await _usuarioServicio.ObtenerPorId(int.Parse(idUsuario)));
+                response.Estado = true;
+                response.Objeto = usuario;
+            }
+            catch (Exception ex)
+            {
+                response.Estado = false;
+                response.Mensaje = ex.Message;
+            }
+            return StatusCode(StatusCodes.Status200OK,response);
+        }
+        [HttpPost]
+        public async Task<IActionResult> GuardarPerfil([FromBody] VMUsuario modelo)
+        {
+            GenericResponse<VMUsuario> response = new GenericResponse<VMUsuario>();
+            try
+            {
+                ClaimsPrincipal claimUser = HttpContext.User;
+                string idUsuario = claimUser.Claims
+                    .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                    .Select(c => c.Value).SingleOrDefault();
+
+                Usuario entidad = _mapper.Map<Usuario>(modelo);
+
+                entidad.UsuarioId = int.Parse(idUsuario);
+
+                bool resultado = await _usuarioServicio.GuardarPerfil(entidad);
+
+                response.Estado = resultado;
+            }
+            catch (Exception ex)
+            {
+                response.Estado = false;
+                response.Mensaje = ex.Message;
+            }
+            return StatusCode(StatusCodes.Status200OK, response);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> Salir()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login","Acceso");
         }
     }
 }

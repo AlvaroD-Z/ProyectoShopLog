@@ -1,15 +1,19 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ProyectoShopLog.AplicacionWeb.Models.ViewModels;
 using ProyectoShopLog.AplicacionWeb.Utilidades.Response;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.Entity;
+using System.Security.Claims;
 
 namespace ProyectoShopLog.AplicacionWeb.Controllers
 {
+    [Authorize]
     public class AdmiGastoController : Controller
     {
+        
         private static readonly int MaxNumeroDecimales = 2;
         private readonly IGastoService _gastoServicio;
         private readonly IRolService _rolServicio;
@@ -76,6 +80,13 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
         {
             try
             {
+                ClaimsPrincipal claimUser = HttpContext.User;
+                string idUsuario = claimUser.Claims
+                    .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                    .Select(c => c.Value).SingleOrDefault();
+
+                gasto.UsuarioId = int.Parse(idUsuario);
+
                 Gasto gastoCreado = await _gastoServicio.Crear(gasto);
 
                 return StatusCode(StatusCodes.Status200OK, new { gastoId = gastoCreado.GastoId });

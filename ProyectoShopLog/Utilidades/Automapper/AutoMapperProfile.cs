@@ -39,7 +39,17 @@ namespace ProyectoShopLog.AplicacionWeb.Utilidades.Automapper
                 opt => opt.MapFrom(origen => origen.InverseIdMenuPadreNavigation));
             #endregion
             #region Usuario
-            CreateMap<Usuario, VMUsuario>().ReverseMap();
+            CreateMap<Usuario, VMUsuario>()
+                .ForMember(destino =>
+                    destino.NombreRol,
+                    opt => opt.MapFrom(origen => origen.IdRolNavigation.Descripcion)
+                );
+
+            CreateMap<VMUsuario, Usuario>()
+                .ForMember(destino =>
+                    destino.IdRolNavigation,
+                    opt => opt.Ignore()
+                );
             #endregion Usuario
         }
     }

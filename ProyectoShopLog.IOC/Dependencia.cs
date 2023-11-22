@@ -36,6 +36,8 @@ namespace ProyectoShopLog.IOC
             services.AddScoped<IGastoService, GastoService>();
 
             services.AddScoped<ICategoriaService, CategoriaService>();
+
+            services.AddScoped<IMenuService, MenuService>();
         }
 
     }

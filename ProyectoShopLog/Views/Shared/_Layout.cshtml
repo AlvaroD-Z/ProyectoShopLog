@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Mi Registro de compras - @ViewData["Title"]</title>
+    <title>Mi Registro de gastos e ingresos - @ViewData["Title"]</title>
 
     <!-- Custom fonts for this template-->
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -42,9 +42,10 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
+            @await Component.InvokeAsync("Menu")
             <!-- Nav Item - Dashboard -->
 
-            <!-- Nav Item - Administración Collapse Menu -->
+            @* <!-- Nav Item - Administración de datos Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdministracion">
                     <i class="fas fa-fw fa-cog"></i>
@@ -58,9 +59,9 @@
                         <a class="collapse-item" href="@Url.Action("Index","Categoria")">Categorias</a>
                     </div>
                 </div>
-            </li>
+            </li> *@
 
-            <!-- Nav Item - Inventario Collapse Menu -->
+            @* <!-- Nav Item - Calificar aplicacion Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCalificar">
                     <i class="fas fa-fw fa-clipboard-list"></i>
@@ -73,9 +74,9 @@
                             comentarios</a>
                     </div>
                 </div>
-            </li>
+            </li> *@
 
-            <!-- Nav Item - Venta Collapse Menu -->
+            @* <!-- Nav Item - Administracion de usuarios Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsuarios">
                     <i class="fas fa-fw fa-tags"></i>
@@ -86,9 +87,9 @@
                         <a class="collapse-item" href="@Url.Action("Index","Usuario")">Usuarios</a>
                     </div>
                 </div>
-            </li>
+            </li> *@
 
-            <!-- Nav Item - Venta Collapse Menu -->
+            @* <!-- Nav Item - Administracion de cuenta Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCuenta">
                     <i class="fas fa-fw fa-tags"></i>
@@ -99,7 +100,7 @@
                         <a class="collapse-item" href="@Url.Action("CambiarContra","Usuario")">Cambiar contraseña</a>
                     </div>
                 </div>
-            </li>
+            </li> *@
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -127,7 +128,7 @@
                     <ul class="navbar-nav ml-auto">
 
                         <div class="topbar-divider d-none d-sm-block"></div>
-
+                        @*
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -149,7 +150,9 @@
                                     Salir
                                 </a>
                             </div>
-                        </li>
+                        </li> *@
+
+                        @await Component.InvokeAsync("MenuUsuario")
 
                     </ul>
 

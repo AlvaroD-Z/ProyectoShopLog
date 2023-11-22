@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ProyectoShopLog.AplicacionWeb.Controllers
 {
+    [Authorize]
     public class CalificarController : Controller
     {
         public IActionResult Index()

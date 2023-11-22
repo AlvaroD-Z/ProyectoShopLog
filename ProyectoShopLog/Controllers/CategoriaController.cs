@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.Entity;
 
 namespace ProyectoShopLog.AplicacionWeb.Controllers
 {
+    [Authorize]
     public class CategoriaController : Controller
     {
         private readonly ICategoriaService _categoriaService;

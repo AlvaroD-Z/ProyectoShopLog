@@ -101,17 +101,10 @@ namespace ProyectoShopLog.BLL.Implementacion
 
         public async Task<Usuario> Editar(Usuario entidad)
         {
-            Usuario usuario_existe = await _repositorio.Obtener(u => u.Correo == entidad.Correo && u.UsuarioId != entidad.UsuarioId);
-
-            if (usuario_existe != null)
-            {
-                throw new TaskCanceledException("El correo ya existe");
-            }
-
+ 
             try
             {
                 IQueryable<Usuario> queryUsuario = await _repositorio.Consultar(u => u.UsuarioId == entidad.UsuarioId);
-                Debug.WriteLine("geloo");
                 Usuario usuario_editar = queryUsuario.First();
                 usuario_editar.Correo = entidad.Correo;
                 usuario_editar.IdRol = entidad.IdRol;
@@ -122,7 +115,7 @@ namespace ProyectoShopLog.BLL.Implementacion
                     throw new TaskCanceledException("No se pudo modificar el usuario");
                 }
 
-                Usuario usuario_editado = queryUsuario.Include(r => r.IdRolNavigation).First();
+                Usuario usuario_editado = queryUsuario.First();
 
                 return usuario_editado;
             }

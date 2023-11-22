@@ -30,9 +30,6 @@ $(document).ready(function () {
              "type": "GET",
              "datatype": "json"
          },
-        /*"columnDefs": [
-            { "defaultContent": "-", "targets": "_all" }
-        ],*/
          "columns": [
              { "data": "usuarioId", "visible": true, "searchable": false },
              { "data": "correo" },
