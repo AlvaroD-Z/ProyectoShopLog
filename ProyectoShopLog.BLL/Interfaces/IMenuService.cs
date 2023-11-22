@@ -11,5 +11,6 @@ namespace ProyectoShopLog.BLL.Interfaces
     public interface IMenuService
     {
         Task<List<Menu>> ObetenerMenus(int idUsuario);
+        Task<bool> TienePermisoMenu(int idUsuario, string controlador, string accion);
     }
 }

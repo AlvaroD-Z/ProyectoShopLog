@@ -56,5 +56,28 @@ namespace ProyectoShopLog.BLL.Implementacion
                                     }).ToList();
             return listaMenu;
         }
+
+        public async Task<bool> TienePermisoMenu(int idUsuario, string controlador, string accion)
+        {
+            IQueryable<Usuario> tbUsuario = await _repositorioUsuario.Consultar(u => u.UsuarioId == idUsuario);
+            IQueryable<RolMenu> tbRolMenu = await _repositorioRolMenu.Consultar();
+            IQueryable<Menu> tbMenu = await _repositorioMenu.Consultar();
+
+            Menu menu_encontrado = (from u in tbUsuario
+                                          join rm in tbRolMenu on u.IdRol equals rm.IdRol
+                                          join m in tbMenu on rm.IdMenu equals m.IdMenu
+                                    where m.Controlador == controlador && m.PaginaAccion == accion
+                                          select m).FirstOrDefault();
+
+            if(menu_encontrado == null)
+            {
+                return false;
+
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }

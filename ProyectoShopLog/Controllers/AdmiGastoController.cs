@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ProyectoShopLog.AplicacionWeb.Models.ViewModels;
+using ProyectoShopLog.AplicacionWeb.Utilidades.CustomFilter;
 using ProyectoShopLog.AplicacionWeb.Utilidades.Response;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.Entity;
@@ -25,16 +26,17 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
             _rolServicio = rolServicio;
             _logger = logger;
         }
+        [ClaimRequirement(controlador: "AdmiGasto", accion: "Index")]
         public IActionResult Index()
         {
             return View();
         }
-
+        [ClaimRequirement(controlador: "AdmiGasto", accion: "VerHistGas")]
         public IActionResult VerHistGas()
         {
             return View();
         }
-
+        [ClaimRequirement(controlador: "AdmiGasto", accion: "VerBalance")]
         public IActionResult VerBalance()
         {
             return View();

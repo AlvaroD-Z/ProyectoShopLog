@@ -98,6 +98,69 @@ namespace ProyectoShopLog.BLL.Implementacion
                 throw ex;
             }
         }
+        public async Task<Usuario> Registrar(Usuario entidad, string UrlPlantillaCorreo = "")
+        {
+            Usuario usuario_existe = await _repositorio.Obtener(u => u.Correo == entidad.Correo);
+            if (usuario_existe != null)
+            {
+                throw new TaskCanceledException("El correo ya existe");
+            }
+
+            try
+            {
+                string clave_generada = entidad.Clave;
+                entidad.Clave = _utilidadesService.ConvertirSha256(clave_generada);
+
+                Usuario usuario_creado = await _repositorio.Crear(entidad);
+
+                if (usuario_creado.UsuarioId == 0)
+                {
+                    throw new TaskCanceledException("No se pudo crear el usuario");
+                }
+
+                if (UrlPlantillaCorreo != "")
+                {
+                    UrlPlantillaCorreo = UrlPlantillaCorreo.Replace("[correo]", usuario_creado.Correo).Replace("[clave]", clave_generada);
+
+                    string htmlCorreo = "";
+
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(UrlPlantillaCorreo);
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        using (Stream dataStream = response.GetResponseStream())
+                        {
+                            StreamReader readerStream = null;
+                            if (response.CharacterSet == null)
+                            {
+                                readerStream = new StreamReader(dataStream);
+                            }
+                            else
+                            {
+                                readerStream = new StreamReader(dataStream, Encoding.GetEncoding(response.CharacterSet));
+                            }
+                            htmlCorreo = readerStream.ReadToEnd();
+                            response.Close();
+                            readerStream.Close();
+                        }
+                    }
+                    if (htmlCorreo != "")
+                    {
+                        await _correoService.EnviarCorreo(usuario_creado.Correo, "Cuenta Creada", htmlCorreo);
+                    }
+                }
+                IQueryable<Usuario> query = await _repositorio.Consultar(u => u.UsuarioId == usuario_creado.UsuarioId);
+                usuario_creado = query.Include(r => r.IdRolNavigation).First();
+
+                return usuario_creado;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
 
         public async Task<Usuario> Editar(Usuario entidad)
         {

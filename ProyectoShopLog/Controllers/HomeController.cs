@@ -12,6 +12,7 @@ using ProyectoShopLog.AplicacionWeb.Models.ViewModels;
 using ProyectoShopLog.AplicacionWeb.Utilidades.Response;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.Entity;
+using ProyectoShopLog.AplicacionWeb.Utilidades.CustomFilter;
 
 namespace ProyectoShopLog.Controllers
 {
@@ -26,16 +27,20 @@ namespace ProyectoShopLog.Controllers
             _mapper = mapper;
         }
 
+        
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult Privacy()
         {
             return View();
         }
         public IActionResult Perfil()
+        {
+            return View();
+        }
+        public IActionResult SinPermiso()
         {
             return View();
         }

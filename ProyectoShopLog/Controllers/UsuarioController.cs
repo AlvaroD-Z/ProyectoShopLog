@@ -22,6 +22,7 @@ using ProyectoShopLog.AplicacionWeb.Models.ViewModels;
 using ProyectoShopLog.AplicacionWeb.Utilidades.Response;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.Entity;
+using ProyectoShopLog.AplicacionWeb.Utilidades.CustomFilter;
 
 namespace ProyectoShopLog.AplicacionWeb.Controllers
 {
@@ -37,11 +38,12 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
             _usuarioServicio = usuarioServicio;
             _rolServicio = rolServicio;
         }
+        [ClaimRequirement(controlador: "Usuario", accion: "Index")]
         public IActionResult Index()
         {
             return View();
         }
-
+        [ClaimRequirement(controlador: "Usuario", accion: "CambiarContra")]
         public IActionResult CambiarContra()
         {
             return View();

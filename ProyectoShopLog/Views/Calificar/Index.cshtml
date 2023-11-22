@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Calificar aplicación";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<int> numeros = new List<int> { 1, 2, 3, 4, 5 };
 }
 
 <div class="container-fluid">
@@ -20,12 +21,21 @@
                                 <div class="form-row">
                                     <div class="form-group col-sm-6">
                                         <label for="txtNuevaCalificacion">Ingrese un comentario</label>
-                                        <input type="text" class="form-control form-control-sm input-validar" id="txtNuevaCalificacion" name="Nuevo limite mensual">
+                                        <input type="text" class="form-control form-control-sm input-validar" id="txtNuevaCalificacion" name="">
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        <label for="numNuevaCalificacionValor">Ingrese una calificacíon</label>
-                                        <input type="number" class="form-control form-control-sm input-validar" id="numNuevaCalificacionValor" name="Ingrese un valor del 1 a 5">
+                                        <label for="numNuevaCalificacionValor">Ingrese una calificacíon (Ingrese un valor del 1 a 5)</label>
+                                        <input type="number" class="form-control form-control-sm input-validar" id="numNuevaCalificacionValor" name="">
                                     </div>
+                                    <div>
+                                        <select class="form-control" id="comboBoxNro">
+                                            @foreach (var numero in numeros)
+                                            {
+                                                <option value="@numero">@numero</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="col-sm-4">

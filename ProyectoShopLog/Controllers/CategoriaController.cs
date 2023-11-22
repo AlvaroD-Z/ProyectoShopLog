@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProyectoShopLog.AplicacionWeb.Utilidades.CustomFilter;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.Entity;
 
@@ -14,7 +15,7 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
         {
             _categoriaService = categoriaService;
         }
-
+        [ClaimRequirement(controlador: "Categoria", accion: "Index")]
         public IActionResult Index()
         {
             return View();

@@ -2,15 +2,18 @@
 using ProyectoShopLog.AplicacionWeb.Models.ViewModels;
 using ProyectoShopLog.BLL.Interfaces;
 using ProyectoShopLog.Entity;
-
+using AutoMapper;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Newtonsoft.Json;
+using ProyectoShopLog.AplicacionWeb.Utilidades.Response;
 
 namespace ProyectoShopLog.AplicacionWeb.Controllers
 {
     public class AccesoController : Controller
     {
+        private readonly IMapper _mapper;
         private readonly IUsuarioService _usuarioServicio;
         public AccesoController(IUsuarioService usuarioServicio)
         {
@@ -32,6 +35,40 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
            
 
             return View();
+        }
+
+        public IActionResult Registrarme()
+        {
+
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Registrarme(VMUsuario modelo)
+        {
+            GenericResponse<VMUsuario> gResponse = new GenericResponse<VMUsuario>();
+
+            try
+            {
+                modelo.IdRol = 3;
+                modelo.NombreRol = "Usuario";
+                VMUsuario vmUsuario = modelo;
+
+                Usuario usuario_creado = await _usuarioServicio.Registrar(_mapper.Map<Usuario>(vmUsuario));
+
+                vmUsuario = _mapper.Map<VMUsuario>(usuario_creado);
+
+                gResponse.Estado = true;
+                Console.WriteLine(vmUsuario);
+                gResponse.Objeto = vmUsuario;
+            }
+            catch (Exception ex)
+            {
+                gResponse.Estado = false;
+                gResponse.Mensaje = ex.Message;
+            }
+
+            return StatusCode(StatusCodes.Status200OK, gResponse);
         }
         [HttpPost]
         public async Task<IActionResult> Login(VMUsuarioLogin modelo)
