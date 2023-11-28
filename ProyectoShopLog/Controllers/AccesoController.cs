@@ -15,9 +15,10 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUsuarioService _usuarioServicio;
-        public AccesoController(IUsuarioService usuarioServicio)
+        public AccesoController(IUsuarioService usuarioServicio, IMapper mapper)
         {
             _usuarioServicio = usuarioServicio;
+            _mapper = mapper;
         }
         public IActionResult Login()
         {
@@ -61,14 +62,16 @@ namespace ProyectoShopLog.AplicacionWeb.Controllers
                 gResponse.Estado = true;
                 Console.WriteLine(vmUsuario);
                 gResponse.Objeto = vmUsuario;
+                return RedirectToAction("Login", "Acceso");
             }
             catch (Exception ex)
             {
                 gResponse.Estado = false;
                 gResponse.Mensaje = ex.Message;
+                return StatusCode(StatusCodes.Status200OK, gResponse);
             }
 
-            return StatusCode(StatusCodes.Status200OK, gResponse);
+            
         }
         [HttpPost]
         public async Task<IActionResult> Login(VMUsuarioLogin modelo)
